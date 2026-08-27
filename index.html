@@ -3,90 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VisioGuia - Assistente Virtual Acessível</title>
+  <title>Menu de Acessibilidade</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <a href="#conteudo-principal" class="skip-link">Pular direto para o conteúdo principal</a>
 
-  <header role="banner">
-    <div class="header-container">
-      <h1 class="brand-title">
-        <span class="brand-icon" aria-hidden="true"></span>
-        VisioGuia
-      </h1>
+  <!-- Botão principal de ativação por voz -->
+  <button id="btn-voz" class="btn-voice-command" aria-label="Ativar comando de voz. Atalho: Alt + V" accesskey="v">
+    <span class="mic-icon" aria-hidden="true">🎙️</span>
+    <span>Ativar Comando de Voz (Alt + V)</span>
+  </button>
 
-      <section class="assistant-panel" aria-label="Assistente de Voz">
-        <button id="btn-listen" class="btn-assistant" onclick="toggleVoiceAssistant()">
-          <span aria-hidden="true">🎤</span>
-          <span id="btn-text">ATIVAR ASSISTENTE DE VOZ</span>
-        </button>
-        <div id="assistant-status" class="assistant-status" role="status" aria-live="polite">
-          Aperte o botão acima ou diga um comando para iniciar.
-        </div>
-      </section>
-
-      <section class="accessibility-panel" aria-label="Ajuste do Tamanho do Texto">
-        <fieldset class="control-group">
-          <legend>Tamanho do Texto</legend>
-          <div class="options-wrapper">
-            <button class="btn-font active" onclick="setFontSize('normal', this)">Padrão</button>
-            <button class="btn-font" onclick="setFontSize('medium', this)">Grande</button>
-            <button class="btn-font" onclick="setFontSize('large', this)">Extra Grande</button>
-            <button class="btn-font" onclick="setFontSize('xlarge', this)">Máximo</button>
-          </div>
-        </fieldset>
-      </section>
-    </div>
-  </header>
-
-  <main id="conteudo-principal" role="main" tabIndex="-1">
+  <!-- Menu de Acessibilidade -->
+  <nav class="accessibility-menu" aria-label="Menu de Acessibilidade">
+    <h1 class="menu-title">Menu de Acessibilidade</h1>
     
-    <section id="secao-emergencia" class="app-section section-emergency">
-      <h2 class="section-title">Seção 1: Atalho de Emergência</h2>
-      <p>Use este botão para ligar imediatamente para o serviço de emergência (192).</p>
-      <a href="tel:192" class="btn-large btn-emergency-action">LIGAR AGORA PARA A EMERGÊNCIA (192)</a>
-      <button class="btn-large" onclick="speakSection('secao-emergencia')">🔊 LER ESTA SEÇÃO</button>
-    </section>
+    <ul class="menu-list" role="menu">
+      
+      <li role="none">
+        <button role="menuitem" class="menu-btn" accesskey="1" aria-label="Opção 1: Alternar Alto Contraste. Atalho: Alt + 1">
+          <span class="option-number">1.</span> Alternar Alto Contraste
+        </button>
+      </li>
 
-    <section id="secao-leitor" class="app-section">
-      <h2 class="section-title">Seção 2: Leitor de Texto</h2>
-      <article class="reader-box" tabIndex="0">
-        <h3>Texto Atual:</h3>
-        <p id="texto-leitura">
-          Bem-vindo ao VisioGuia. Você pode interagir com este site usando comandos de voz ou os botões de leitura de cada seção.
-        </p>
-      </article>
-      <button class="btn-large" onclick="speakSection('secao-leitor')">🔊 LER TEXTO DA SEÇÃO</button>
-    </section>
+      <li role="none">
+        <button role="menuitem" class="menu-btn" accesskey="2" aria-label="Opção 2: Aumentar Tamanho do Texto. Atalho: Alt + 2">
+          <span class="option-number">2.</span> Aumentar Texto
+        </button>
+      </li>
 
-    <section id="secao-lembretes" class="app-section">
-      <h2 class="section-title">Seção 3: Lembretes do Dia</h2>
-      <ol class="content-list">
-        <li><strong>08:00:</strong> Tomar medicamento para pressão.</li>
-        <li><strong>12:30:</strong> Horário do almoço.</li>
-        <li><strong>16:00:</strong> Caminhada orientada.</li>
-      </ol>
-      <button class="btn-large" onclick="speakSection('secao-lembretes')">🔊 LER LEMBRETES</button>
-    </section>
+      <li role="none">
+        <button role="menuitem" class="menu-btn" accesskey="3" aria-label="Opção 3: Alterar Velocidade da Voz do Leitor. Atalho: Alt + 3">
+          <span class="option-number">3.</span> Velocidade da Voz
+        </button>
+      </li>
 
-    <section id="secao-instrucoes" class="app-section">
-      <h2 class="section-title">Seção 4: Comandos de Voz</h2>
-      <ul class="content-list">
-        <li><strong>"Ler emergência"</strong>, <strong>"Ler leitor"</strong> ou <strong>"Ler lembretes"</strong></li>
-        <li><strong>"Ligar emergência"</strong> - Aciona a chamada para o 192</li>
-        <li><strong>"Aumentar texto"</strong> ou <strong>"Diminuir texto"</strong></li>
-        <li><strong>"Ajuda"</strong> - Lista os comandos disponíveis</li>
-      </ul>
-      <button class="btn-large" onclick="speakSection('secao-instrucoes')">🔊 LER INSTRUÇÕES</button>
-    </section>
+      <li role="none">
+        <button role="menuitem" class="menu-btn" accesskey="4" aria-label="Opção 4: Ler Conteúdo da Tela. Atalho: Alt + 4">
+          <span class="option-number">4.</span> Ler Tela Atual
+        </button>
+      </li>
 
-  </main>
+      <li role="none">
+        <button role="menuitem" class="menu-btn btn-help" accesskey="5" aria-label="Opção 5: Abrir Ajuda dos Comandos de Voz. Atalho: Alt + 5">
+          <span class="option-number">5.</span> Ajuda de Voz
+        </button>
+      </li>
 
-  <footer role="contentinfo">
-    <p><strong>VisioGuia</strong> - Plataforma de Auxílio com Assistente Virtual de Voz.</p>
-  </footer>
+    </ul>
+  </nav>
 
-  <script src="script.js"></script>
+  <!-- Status do Assistente de Voz -->
+  <div id="status-voz" class="voice-status" aria-live="polite">
+    Assistente de voz pronto. Diga um comando ou use os atalhos numéricos.
+  </div>
+
 </body>
 </html>
