@@ -3,60 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu de Acessibilidade</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Portal Acessível - Assistente de Voz</title>
+  <style>
+    /* Estilos de Alto Contraste e Acessibilidade */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #000000;
+      --card-bg: #1a1a1a;
+      --text-color: #ffffff;
+      --accent-color: #ffff00;
+      --focus-color: #00ffff;
+      --font-scale: 1;
+    }
+
+    /* Modo Contraste Invertido (Branco/Preto) */
+    body.light-mode {
+      --bg-color: #ffffff;
+      --card-bg: #f0f0f0;
+      --text-color: #000000;
+      --accent-color: #0000ff;
+      --focus-color: #ff0055;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: calc(16px * var(--font-scale));
+      padding: 24px;
+      line-height: 1.6;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: calc(2.2rem * var(--font-scale));
+      color: var(--accent-color);
+      margin-bottom: 12px;
+    }
+
+    /* Botão de Microfone */
+    .btn-voice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 24px auto;
+      padding: 20px;
+      background-color: var(--accent-color);
+      color: #000000;
+      font-size: calc(1.4rem * var(--font-scale));
+      font-weight: bold;
+      border: 4px solid var(--text-color);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .btn-voice.listening {
+      background-color: #ff0000;
+      color: #ffffff;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+
+    /* Navegação por Teclado e Foco Visível */
+    button:focus,
+    .menu-btn:focus {
+      outline: 6px solid var(--focus-color) !important;
+      outline-offset: 4px;
+    }
+
+    .menu-container {
+      background-color: var(--card-bg);
+      border: 3px solid var(--accent-color);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .menu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .menu-btn {
+      width: 100%;
+      padding: 18px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      border: 2px solid var(--text-color);
+      border-radius: 8px;
+      font-size: calc(1.2rem * var(--font-scale));
+      font-weight: bold;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .option-number {
+      color: var(--accent-color);
+      margin-right: 8px;
+    }
+
+    /* Painel de Status em Tempo Real */
+    .status-box {
+      max-width: 600px;
+      margin: 24px auto 0 auto;
+      padding: 16px;
+      background-color: var(--card-bg);
+      border: 2px solid var(--focus-color);
+      color: var(--text-color);
+      font-size: calc(1.1rem * var(--font-scale));
+      text-align: center;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Botão principal de ativação por voz -->
-  <button id="btn-voz" class="btn-voice-command" aria-label="Ativar comando de voz. Atalho: Alt + V" accesskey="v">
-    <span class="mic-icon" aria-hidden="true">🎙️</span>
-    <span>Ativar Comando de Voz (Alt + V)</span>
-  </button>
+  <header>
+    <h1>Portal de Acessibilidade</h1>
+    <p>Navegue utilizando teclado, botões visuais ou comandos de voz.</p>
+  </header>
 
-  <!-- Menu de Acessibilidade -->
-  <nav class="accessibility-menu" aria-label="Menu de Acessibilidade">
-    <h1 class="menu-title">Menu de Acessibilidade</h1>
-    
-    <ul class="menu-list" role="menu">
-      
-      <li role="none">
-        <button role="menuitem" class="menu-btn" accesskey="1" aria-label="Opção 1: Alternar Alto Contraste. Atalho: Alt + 1">
-          <span class="option-number">1.</span> Alternar Alto Contraste
-        </button>
-      </li>
+  <main>
+    <!-- Botão Principal de Voz -->
+    <button id="btn-mic" class="btn-voice" aria-label="Ativar comando de voz. Atalho: Barra de Espaço ou Alt mais V" accesskey="v">
+      <span aria-hidden="true">🎙️</span>
+      <span id="mic-text">Ativar Voz (Alt + V)</span>
+    </button>
 
-      <li role="none">
-        <button role="menuitem" class="menu-btn" accesskey="2" aria-label="Opção 2: Aumentar Tamanho do Texto. Atalho: Alt + 2">
-          <span class="option-number">2.</span> Aumentar Texto
-        </button>
-      </li>
+    <!-- Menu Principal -->
+    <nav class="menu-container" aria-label="Menu de Opções Acessíveis">
+      <ul class="menu-list" role="menu">
+        
+        <li role="none">
+          <button role="menuitem" id="opt-1" class="menu-btn" accesskey="1" onclick="alternarContraste()">
+            <span class="option-number">1.</span> Alternar Esquema de Cores
+          </button>
+        </li>
 
-      <li role="none">
-        <button role="menuitem" class="menu-btn" accesskey="3" aria-label="Opção 3: Alterar Velocidade da Voz do Leitor. Atalho: Alt + 3">
-          <span class="option-number">3.</span> Velocidade da Voz
-        </button>
-      </li>
+        <li role="none">
+          <button role="menuitem" id="opt-2" class="menu-btn" accesskey="2" onclick="aumentarTexto()">
+            <span class="option-number">2.</span> Aumentar Tamanho do Texto
+          </button>
+        </li>
 
-      <li role="none">
-        <button role="menuitem" class="menu-btn" accesskey="4" aria-label="Opção 4: Ler Conteúdo da Tela. Atalho: Alt + 4">
-          <span class="option-number">4.</span> Ler Tela Atual
-        </button>
-      </li>
+        <li role="none">
+          <button role="menuitem" id="opt-3" class="menu-btn" accesskey="3" onclick="resetarTexto()">
+            <span class="option-number">3.</span> Restaurar Tamanho Padrão
+          </button>
+        </li>
 
-      <li role="none">
-        <button role="menuitem" class="menu-btn btn-help" accesskey="5" aria-label="Opção 5: Abrir Ajuda dos Comandos de Voz. Atalho: Alt + 5">
-          <span class="option-number">5.</span> Ajuda de Voz
-        </button>
-      </li>
+        <li role="none">
+          <button role="menuitem" id="opt-4" class="menu-btn" accesskey="4" onclick="lerTela()">
+            <span class="option-number">4.</span> Ler Conteúdo da Tela
+          </button>
+        </li>
 
-    </ul>
-  </nav>
+      </ul>
+    </nav>
 
-  <!-- Status do Assistente de Voz -->
-  <div id="status-voz" class="voice-status" aria-live="polite">
-    Assistente de voz pronto. Diga um comando ou use os atalhos numéricos.
-  </div>
+    <!-- Região Viva (Leitores de tela anunciam mudanças aqui) -->
+    <div id="status" class="status-box" aria-live="polite">
+      Assistente pronto. Pressione Alt + V ou clique no microfone para falar.
+    </div>
+  </main>
+
+  <script>
+    // Configuração de Síntese de Voz (O site fala com o usuário)
+    function falar(texto) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel(); // Para leituras anteriores
+        const mensagem = new SpeechSynthesisUtterance(texto);
+        mensagem.lang = 'pt-BR';
+        mensagem.rate = 1.1; // Velocidade da voz
+        window.speechSynthesis.speak(mensagem);
+      }
+      atualizarStatus(texto);
+    }
+
+    function atualizarStatus(texto) {
+      document.getElementById('status').textContent = texto;
+    }
+
+    // Funcionalidades de Acessibilidade
+    let fontScale = 1;
+
+    function alternarContraste() {
+      document.body.classList.toggle('light-mode');
+      const modo = document.body.classList.contains('light-mode') ? "Fundo claro ativo" : "Alto contraste escuro ativo";
+      falar(modo);
+    }
+
+    function aumentarTexto() {
+      if (fontScale < 1.8) {
+        fontScale += 0.2;
+        document.documentElement.style.setProperty('--font-scale', fontScale);
+        falar("Tamanho do texto aumentado");
+      } else {
+        falar("Tamanho máximo de texto atingido");
+      }
+    }
+
+    function resetarTexto() {
+      fontScale = 1;
+      document.documentElement.style.setProperty('--font-scale', fontScale);
+      falar("Tamanho do texto restaurado ao padrão");
+    }
+
+    function lerTela() {
+      const textoTela = "Você está no Portal de Acessibilidade. Opção 1: Alternar Cores. Opção 2: Aumentar Texto. Opção 3: Restaurar Texto. Opção 4: Ler Tela.";
+      falar(textoTela);
+    }
+
+    // Configuração de Reconhecimento de Voz (O site ouve o usuário)
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'pt-BR';
+      recognition.continuous = false;
+
+      const btnMic = document.getElementById('btn-mic');
+      const micText = document.getElementById('mic-text');
+
+      btnMic.addEventListener('click', () => {
+        try {
+          recognition.start();
+        } catch (e) {
+          recognition.stop();
+        }
+      });
+
+      recognition.onstart = () => {
+        btnMic.classList.add('listening');
+        micText.textContent = "Ouvindo... Fale agora";
+        atualizarStatus("Microfone ativo. Diga um comando como: Aumentar texto, Contraste ou Ler.");
+      };
+
+      recognition.onend = () => {
+        btnMic.classList.remove('listening');
+        micText.textContent = "Ativar Voz (Alt + V)";
+      };
+
+      recognition.onresult = (event) => {
+        const comando = event.results[0][0].transcript.toLowerCase();
+        atualizarStatus(`Comando reconhecido: "${comando}"`);
+
+        // Processamento dos comandos falados
+        if (comando.includes('contraste') || comando.includes('cor') || comando.includes('um') || comando.includes('1')) {
+          alternarContraste();
+        } else if (comando.includes('aumentar') || comando.includes('maior') || comando.includes('dois') || comando.includes('2')) {
+          aumentarTexto();
+        } else if (comando.includes('restaurar') || comando.includes('padrão') || comando.includes('três') || comando.includes('3')) {
+          resetarTexto();
+        } else if (comando.includes('ler') || comando.includes('ajuda') || comando.includes('quatro') || comando.includes('4')) {
+          lerTela();
+        } else {
+          falar("Comando não reconhecido. Tente dizer: Contraste, Aumentar texto, ou Ler.");
+        }
+      };
+
+    } else {
+      atualizarStatus("Seu navegador não suporta reconhecimento de voz direto. Use os atalhos de teclado (Alt + 1, Alt + 2, etc).");
+    }
+
+    // Leitura inicial ao carregar a página
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        falar("Página carregada. Pressione Alt mais V para ativar os comandos de voz.");
+      }, 1000);
+    });
+  </script>
 
 </body>
 </html>
