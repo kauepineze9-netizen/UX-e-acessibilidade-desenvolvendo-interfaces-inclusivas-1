@@ -1,0 +1,400 @@
+/* ==========================================================================
+   1. VARIÁVEIS DE DESIGN - TEMA CLARO FIXO DE ALTO CONTRASTE
+   ========================================================================== */
+
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f0f0f0;
+  --text-primary: #000000;
+  --text-secondary: #111111;
+  --accent-color: #0000b8; /* Azul escuro de alta legibilidade */
+  --accent-text: #ffffff;
+  --border-color: #000000;
+  --focus-outline: #000000;
+  --font-scale: 1rem;
+  --card-bg: #ffffff;
+  --danger-bg: #d50000;
+  --danger-text: #ffffff;
+  --assistant-active: #008000;
+}
+
+/* Ajustes Dinâmicos de Tamanho de Fonte */
+
+body.font-medium {
+  --font-scale: 1.15rem;
+}
+
+body.font-large {
+  --font-scale: 1.35rem;
+}
+
+body.font-xlarge {
+  --font-scale: 1.6rem;
+}
+
+/* ==========================================================================
+   2. ESTILOS BASE E ESTRUTURA
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--font-scale);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Esconder texto visualmente mantendo para Leitores de Tela */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Link de atalho para pular direto para o conteúdo principal */
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 10px;
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  padding: 18px 24px;
+  font-weight: bold;
+  font-size: 1.3rem;
+  z-index: 9999;
+  text-decoration: underline;
+  border: 4px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.skip-link:focus {
+  top: 10px;
+  outline: 5px solid var(--focus-outline);
+}
+
+/* Estilo de Foco Acessível Universal */
+
+:focus-visible {
+  outline: 5px solid var(--focus-outline) !important;
+  outline-offset: 4px !important;
+}
+
+/* ==========================================================================
+   3. CABEÇALHO E PAINÉIS AUTO-OCULTÁVEIS
+   ========================================================================== */
+
+header {
+  background-color: var(--bg-secondary);
+  border-bottom: 4px solid var(--border-color);
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.brand-title {
+  font-size: 2em;
+  font-weight: 900;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-primary);
+}
+
+.brand-icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  border: 3px solid var(--border-color);
+}
+
+/* REGRA DE OCULTAÇÃO AUTOMÁTICA DOS PAINÉIS AO ROLAR DA TELA */
+
+.assistant-panel,
+.accessibility-panel {
+  background-color: var(--card-bg);
+  border: 4px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 300px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease, margin 0.3s ease, border-width 0.3s ease;
+}
+
+.accessibility-panel {
+  border-width: 3px;
+  border-radius: 12px;
+  padding: 0.8rem;
+}
+
+/* Esconde ambos os painéis quando a classe 'scrolled' for ativada na rolagação */
+
+body.scrolled .assistant-panel,
+body.scrolled .accessibility-panel {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-width: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Garante que os painéis reapareçam se o usuário navegar até eles via teclado (TAB) */
+
+.assistant-panel:focus-within,
+.accessibility-panel:focus-within {
+  max-height: 300px !important;
+  opacity: 1 !important;
+  padding: 1rem !important;
+  margin-top: 0.5rem !important;
+  border-width: 4px !important;
+  pointer-events: auto !important;
+}
+
+.btn-assistant {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 70px;
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+  font-size: 1.4em;
+  font-weight: 900;
+  border: 4px solid var(--border-color);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-assistant.listening {
+  background-color: var(--assistant-active);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.assistant-status {
+  background-color: var(--bg-secondary);
+  border: 2px dashed var(--border-color);
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+/* CONTROLE DE TAMANHO DE FONTE */
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.control-group legend {
+  font-weight: bold;
+  font-size: 1em;
+}
+
+.options-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-font {
+  flex: 1;
+  min-height: 48px;
+  padding: 6px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.95em;
+  cursor: pointer;
+}
+
+.btn-font.active {
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+}
+
+/* ==========================================================================
+   4. ESTRUTURA DAS SEÇÕES DO APLICATIVO
+   ========================================================================== */
+
+main {
+  flex: 1;
+  max-width: 1100px;
+  width: 100%;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.app-section {
+  background-color: var(--card-bg);
+  border: 4px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.8rem;
+  scroll-margin-top: 120px;
+}
+
+.section-emergency {
+  border-color: var(--danger-bg);
+  background-color: #ffebee;
+}
+
+.section-title {
+  font-size: 1.8em;
+  margin-bottom: 1rem;
+  border-bottom: 3px solid var(--border-color);
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-emergency .section-title {
+  border-color: var(--danger-bg);
+  color: #c62828;
+}
+
+/* BOTÕES DE AÇÃO INTERNOS */
+
+.btn-large {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  background-color: var(--accent-color);
+  color: var(--accent-text);
+  font-size: 1.3em;
+  font-weight: 900;
+  border: 3px solid var(--border-color);
+  border-radius: 12px;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.btn-emergency-action {
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+  border-color: var(--border-color);
+  font-size: 1.5em;
+}
+
+/* LISTAS DE CONTEÚDO */
+
+.content-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1rem;
+}
+
+.content-list li {
+  padding-left: 2rem;
+  position: relative;
+  font-size: 1.1em;
+}
+
+.content-list li::before {
+  content: "■";
+  color: var(--accent-color);
+  font-size: 1.4em;
+  position: absolute;
+  left: 0;
+  top: -2px;
+}
+
+kbd {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.9em;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.reader-box {
+  background-color: var(--bg-secondary);
+  border: 3px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 12px;
+  font-size: 1.2em;
+  line-height: 1.8;
+  margin-top: 1rem;
+}
+
+/* ==========================================================================
+   5. RODAPÉ ACESSÍVEL
+   ========================================================================== */
+
+footer {
+  background-color: var(--bg-secondary);
+  border-top: 4px solid var(--border-color);
+  padding: 2rem 1rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+footer p {
+  font-size: 1em;
+  margin-bottom: 0.5rem;
+}
