@@ -3,269 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Central de Auxílio Acessível</title>
+  <title>Plataforma Acessível de Apoio</title>
   <style>
-    /* Estilos de Alto Contraste e Fontes Dinâmicas */
-    :root {
-      --bg-principal: #000000;
-      --card-bg: #121212;
-      --texto-cor: #ffffff;
-      --destaque-amarelo: #ffff00;
-      --foco-ciano: #00ffff;
-      --tamanho-fonte: 1.2rem;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      background-color: var(--bg-principal);
-      color: var(--texto-cor);
       font-family: Arial, sans-serif;
-      font-size: var(--tamanho-fonte);
       line-height: 1.6;
+      background-color: #000; /* Alto contraste: fundo preto */
+      color: #FFF;          /* Texto branco */
+      margin: 0;
       padding: 20px;
     }
 
-    header {
-      text-align: center;
-      margin-bottom: 30px;
+    /* Oculta o conteúdo visualmente, mas mantém para leitores de tela */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
     }
 
-    h1 {
-      color: var(--destaque-amarelo);
-      font-size: 2.5em;
-      margin-bottom: 10px;
-    }
-
-    /* Botão Principal de Ativação por Voz */
-    .btn-mic-principal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto 30px auto;
-      padding: 25px;
-      background-color: var(--destaque-amarelo);
-      color: #000000;
-      font-size: 1.5em;
-      font-weight: bold;
-      border: 4px solid var(--texto-cor);
-      border-radius: 15px;
-      cursor: pointer;
-    }
-
-    .btn-mic-principal.ouvindo {
-      background-color: #ff0000;
-      color: #ffffff;
-      animation: pulso 1.2s infinite;
-    }
-
-    @keyframes pulso {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
-    }
-
-    /* Foco Visual de Alta Visibilidade */
-    button:focus, a:focus {
-      outline: 6px solid var(--foco-ciano) !important;
-      outline-offset: 4px;
-    }
-
-    /* Grid de Serviços de Auxílio */
-    .grid-servicos {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      max-width: 600px;
+    header, main {
+      max-width: 800px;
       margin: 0 auto;
     }
 
-    .card-servico {
-      background-color: var(--card-bg);
-      border: 3px solid var(--destaque-amarelo);
-      border-radius: 12px;
+    h1, h2 {
+      color: #FFFF00; /* Alto contraste: amarelo */
+    }
+
+    section {
+      border: 2px solid #FFF;
       padding: 20px;
-      text-align: left;
-      color: var(--texto-cor);
-      font-size: 1.2em;
+      margin-bottom: 20px;
+      border-radius: 8px;
+    }
+
+    button {
+      background-color: #FFFF00;
+      color: #000;
+      font-size: 1.2rem;
       font-weight: bold;
+      padding: 15px 25px;
+      border: none;
       cursor: pointer;
+      margin-top: 10px;
+      display: block;
+      width: 100%;
     }
 
-    .card-servico:hover {
-      background-color: #222222;
+    button:focus, button:hover {
+      outline: 4px solid #00FFFF; /* Destaque visual e de foco */
+      background-color: #FFF;
     }
 
-    .numero-opcao {
-      color: var(--destaque-amarelo);
-      margin-right: 10px;
-    }
-
-    /* Painel de Mensagens de Áudio */
-    .painel-status {
-      max-width: 600px;
-      margin: 30px auto 0 auto;
-      padding: 20px;
-      background-color: #001a33;
-      border: 3px solid var(--foco-ciano);
-      border-radius: 10px;
-      text-align: center;
-      font-size: 1.2em;
+    .botão-emergência {
+      background-color: #FF0000;
+      color: #FFF;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Assistência Acessível</h1>
-    <p>Use a voz, o teclado ou os botões para navegar.</p>
+  <!-- Mensagem oculta de instrução inicial para leitores de tela -->
+  <div class="sr-only" aria-live="polite">
+    Bem-vindo. Pressione a tecla Tab para navegar entre as opções do site.
+  </div>
+
+  <header role="banner">
+    <h1>Assistente de Acessibilidade</h1>
   </header>
 
-  <main>
-    <!-- Botão de Microfone Central -->
-    <button id="btn-mic" class="btn-mic-principal" aria-label="Ativar microfone. Atalho: Barra de Espaço ou tecla V" accesskey="v">
-      <span aria-hidden="true">🎙️</span>
-      <span id="texto-mic">Falar Comando (Tecla V)</span>
-    </button>
+  <main role="main">
+    
+    <!-- Seção 1: Locomoção / Orientação -->
+    <section aria-labelledby="titulo-locomocao">
+      <h2 id="titulo-locomocao">1. Locomoção e Orientação</h2>
+      <p>Obtenha sua localização atual por voz para ajudar a se orientar no trajeto.</p>
+      <button onclick="obterLocalizacao()" aria-label="Obter minha localização atual">
+        Onde estou agora?
+      </button>
+      <div id="status-localizacao" aria-live="assertive" style="margin-top: 10px;"></div>
+    </section>
 
-    <!-- Lista de Opções de Ajuda -->
-    <nav aria-label="Menu Principal de Auxílio">
-      <div class="grid-servicos" role="menu">
-        
-        <button class="card-servico" role="menuitem" accesskey="1" onclick="executarAcao('descrever')">
-          <span class="numero-opcao">1.</span> Descrever Ambiente / Objeto
-        </button>
+    <!-- Seção 2: Comunicação -->
+    <section aria-labelledby="titulo-conversa">
+      <h2 id="titulo-conversa">2. Conversar</h2>
+      <p>Conecte-se com voluntários ou acione a assistente para conversar.</p>
+      <button onclick="iniciarConversa()" aria-label="Iniciar conversa com voluntário">
+        Iniciar Chat de Voz
+      </button>
+    </section>
 
-        <button class="card-servico" role="menuitem" accesskey="2" onclick="executarAcao('voluntario')">
-          <span class="numero-opcao">2.</span> Chamar Voluntário em Vídeo
-        </button>
+    <!-- Seção 3: Emergência / Pedido de Ajuda -->
+    <section aria-labelledby="titulo-ajuda">
+      <h2 id="titulo-ajuda">3. Pedir Ajuda</h2>
+      <p>Envia uma mensagem de emergência para um contato cadastrado com sua localização.</p>
+      <button class="botão-emergência" onclick="pedirAjuda()" aria-label="Enviar pedido de ajuda emergencial">
+        SOLICITAR AJUDA DE EMERGÊNCIA
+      </button>
+      <div id="status-ajuda" aria-live="assertive" style="margin-top: 10px;"></div>
+    </section>
 
-        <button class="card-servico" role="menuitem" accesskey="3" onclick="executarAcao('ler_texto')">
-          <span class="numero-opcao">3.</span> Ler Texto / Documento
-        </button>
-
-        <button class="card-servico" role="menuitem" accesskey="4" onclick="executarAcao('localizacao')">
-          <span class="numero-opcao">4.</span> Onde Estou? (GPS)
-        </button>
-
-      </div>
-    </nav>
-
-    <!-- Região Viva para Leitores de Tela -->
-    <div id="status" class="painel-status" aria-live="polite">
-      Sistema pronto. Pressione V ou clique no botão amarelo para falar.
-    </div>
   </main>
 
   <script>
-    // 1. Síntese de Voz (O site fala com o usuário)
+    // Função para sintese de voz (faz o navegador falar a resposta)
     function falar(texto) {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Interrompe leituras anteriores
         const mensagem = new SpeechSynthesisUtterance(texto);
         mensagem.lang = 'pt-BR';
-        mensagem.rate = 1.1; // Velocidade ajustada para boa compreensão
         window.speechSynthesis.speak(mensagem);
       }
-      atualizarStatus(texto);
     }
 
-    function atualizarStatus(texto) {
-      document.getElementById('status').textContent = texto;
-    }
+    // Obter localização com GPS do dispositivo
+    function obterLocalizacao() {
+      const status = document.getElementById('status-localizacao');
+      status.innerText = "Buscando sua localização...";
+      falar("Buscando sua localização...");
 
-    // 2. Ações do Menu
-    function executarAcao(opcao) {
-      switch(opcao) {
-        case 'descrever':
-          falar("Iniciando câmera para descrição do ambiente por Inteligência Artificial.");
-          break;
-        case 'voluntario':
-          falar("Conectando com um voluntário em vídeo. Aguarde um momento.");
-          break;
-        case 'ler_texto':
-          falar("Aponta a câmera para o texto que deseja ouvir.");
-          break;
-        case 'localizacao':
-          falar("Obtendo sua localização atual via GPS.");
-          break;
-        default:
-          falar("Opção selecionada.");
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          (posicao) => {
+            const lat = posicao.coords.latitude.toFixed(4);
+            const lon = posicao.coords.longitude.toFixed(4);
+            const resposta = `Sua localização aproximada é latitude ${lat} e longitude ${lon}.`;
+            
+            status.innerText = resposta;
+            falar(resposta);
+          },
+          (erro) => {
+            const erroMsg = "Não foi possível obter a sua localização. Verifique as permissões do seu dispositivo.";
+            status.innerText = erroMsg;
+            falar(erroMsg);
+          }
+        );
+      } else {
+        const naoSuportado = "A navegação por GPS não é suportada pelo seu navegador.";
+        status.innerText = naoSuportado;
+        falar(naoSuportado);
       }
     }
 
-    // 3. Reconhecimento de Voz (O site ouve o usuário)
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (SpeechRecognition) {
-      const recognizer = new SpeechRecognition();
-      recognizer.lang = 'pt-BR';
-      recognizer.continuous = false;
-
-      const btnMic = document.getElementById('btn-mic');
-      const textoMic = document.getElementById('texto-mic');
-
-      btnMic.addEventListener('click', () => {
-        try {
-          recognizer.start();
-        } catch(e) {
-          recognizer.stop();
-        }
-      });
-
-      recognizer.onstart = () => {
-        btnMic.classList.add('ouvindo');
-        textoMic.textContent = "Ouvindo... Pode falar";
-        atualizarStatus("Ouvindo seu comando. Diga: Descrever, Voluntário, Ler ou Localização.");
-      };
-
-      recognizer.onend = () => {
-        btnMic.classList.remove('ouvindo');
-        textoMic.textContent = "Falar Comando (Tecla V)";
-      };
-
-      recognizer.onresult = (event) => {
-        const comando = event.results[0][0].transcript.toLowerCase();
-        atualizarStatus(`Você disse: "${comando}"`);
-
-        if (comando.includes('descrever') || comando.includes('ambiente') || comando.includes('um') || comando.includes('1')) {
-          executarAcao('descrever');
-        } else if (comando.includes('voluntário') || comando.includes('ajuda') || comando.includes('dois') || comando.includes('2')) {
-          executarAcao('voluntario');
-        } else if (comando.includes('ler') || comando.includes('texto') || comando.includes('três') || comando.includes('3')) {
-          executarAcao('ler_texto');
-        } else if (comando.includes('onde') || comando.includes('localização') || comando.includes('quatro') || comando.includes('4')) {
-          executarAcao('localizacao');
-        } else {
-          falar("Comando não reconhecido. Diga o número da opção de 1 a 4 ou a palavra chave.");
-        }
-      };
-    } else {
-      atualizarStatus("Seu navegador não suporta voz. Use os atalhos de teclado (Alt + 1, Alt + 2, etc).");
+    // Simulação de início de chamada/chat
+    function iniciarConversa() {
+      falar("Conectando com a central de voluntários. Aguarde um momento.");
+      alert("Conectando à sala de voz...");
     }
 
-    // 4. Atalho rápido pela tecla Espaço
-    document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space' && document.activeElement.tagName !== 'BUTTON') {
-        e.preventDefault();
-        document.getElementById('btn-mic').click();
-      }
-    });
-
-    // Mensagem inicial ao carregar
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        falar("Central de auxílio carregada. Pressione a barra de espaço para falar um comando.");
-      }, 800);
-    });
+    // Ação do botão de emergência
+    function pedirAjuda() {
+      const status = document.getElementById('status-ajuda');
+      const alerta = "Alerta de emergência acionado! Enviando sua localização para seus contatos de confiança.";
+      
+      status.innerText = alerta;
+      falar(alerta);
+    }
   </script>
-
 </body>
 </html>
