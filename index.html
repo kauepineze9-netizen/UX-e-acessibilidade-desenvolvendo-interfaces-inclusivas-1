@@ -4,67 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Plataforma Acessível de Apoio</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #000; /* Alto contraste: fundo preto */
-      color: #FFF;          /* Texto branco */
-      margin: 0;
-      padding: 20px;
-    }
-
-    /* Oculta o conteúdo visualmente, mas mantém para leitores de tela */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-
-    header, main {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    h1, h2 {
-      color: #FFFF00; /* Alto contraste: amarelo */
-    }
-
-    section {
-      border: 2px solid #FFF;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-    }
-
-    button {
-      background-color: #FFFF00;
-      color: #000;
-      font-size: 1.2rem;
-      font-weight: bold;
-      padding: 15px 25px;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
-      display: block;
-      width: 100%;
-    }
-
-    button:focus, button:hover {
-      outline: 4px solid #00FFFF; /* Destaque visual e de foco */
-      background-color: #FFF;
-    }
-
-    .botão-emergência {
-      background-color: #FF0000;
-      color: #FFF;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -86,7 +26,7 @@
       <button onclick="obterLocalizacao()" aria-label="Obter minha localização atual">
         Onde estou agora?
       </button>
-      <div id="status-localizacao" aria-live="assertive" style="margin-top: 10px;"></div>
+      <div id="status-localizacao" class="status-mensagem" aria-live="assertive"></div>
     </section>
 
     <!-- Seção 2: Comunicação -->
@@ -105,26 +45,56 @@
       <button class="botão-emergência" onclick="pedirAjuda()" aria-label="Enviar pedido de ajuda emergencial">
         SOLICITAR AJUDA DE EMERGÊNCIA
       </button>
-      <div id="status-ajuda" aria-live="assertive" style="margin-top: 10px;"></div>
+      <div id="status-ajuda" class="status-mensagem" aria-live="assertive"></div>
     </section>
 
   </main>
 
   <script>
-    // Função para sintese de voz (faz o navegador falar a resposta)
-    function falar(texto) {
+    let vozHumanizada = null;
+
+    function carregarVozes() {
       if ('speechSynthesis' in window) {
-        const mensagem = new SpeechSynthesisUtterance(texto);
-        mensagem.lang = 'pt-BR';
-        window.speechSynthesis.speak(mensagem);
+        const vozes = window.speechSynthesis.getVoices();
+        
+        vozHumanizada = vozes.find(v => v.lang.includes('pt-BR') && (
+          v.name.includes('Google') || 
+          v.name.includes('Natural') || 
+          v.name.includes('Neural') ||
+          v.name.includes('Luciana') ||
+          v.name.includes('Felipe')
+        )) || vozes.find(v => v.lang.includes('pt-BR'));
       }
     }
 
-    // Obter localização com GPS do dispositivo
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = carregarVozes;
+      carregarVozes();
+    }
+
+    function falar(texto) {
+      if (!('speechSynthesis' in window)) return;
+
+      window.speechSynthesis.cancel();
+
+      const mensagem = new SpeechSynthesisUtterance(texto);
+      
+      if (vozHumanizada) {
+        mensagem.voice = vozHumanizada;
+      }
+
+      mensagem.lang = 'pt-BR';
+      mensagem.rate = 0.95;
+      mensagem.pitch = 1.0;
+      mensagem.volume = 1.0;
+
+      window.speechSynthesis.speak(mensagem);
+    }
+
     function obterLocalizacao() {
       const status = document.getElementById('status-localizacao');
       status.innerText = "Buscando sua localização...";
-      falar("Buscando sua localização...");
+      falar("Buscando sua localização. Por favor, aguarde.");
 
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
@@ -149,13 +119,11 @@
       }
     }
 
-    // Simulação de início de chamada/chat
     function iniciarConversa() {
       falar("Conectando com a central de voluntários. Aguarde um momento.");
       alert("Conectando à sala de voz...");
     }
 
-    // Ação do botão de emergência
     function pedirAjuda() {
       const status = document.getElementById('status-ajuda');
       const alerta = "Alerta de emergência acionado! Enviando sua localização para seus contatos de confiança.";

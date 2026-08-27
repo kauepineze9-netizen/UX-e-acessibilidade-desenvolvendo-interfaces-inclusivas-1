@@ -1,101 +1,63 @@
-/* Configurações Globais de Alto Contraste e Acessibilidade */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
-  background-color: #000000; /* Fundo preto para máximo contraste */
-  color: #FFFFFF; /* Texto branco */
-  font-family: Arial, Helvetica, sans-serif;
-  padding: 24px;
+  font-family: Arial, sans-serif;
   line-height: 1.6;
-}
-
-/* Botão de Comando de Voz */
-.btn-voice-command {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
+  background-color: #000; /* Alto contraste: fundo preto */
+  color: #FFF;          /* Texto branco */
+  margin: 0;
   padding: 20px;
-  background-color: #FFFF00; /* Amarelo de alto contraste */
-  color: #000000;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border: 4px solid #FFFFFF;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 32px;
 }
 
-/* Foco destacado para navegação por teclado */
-button:focus,
-.menu-btn:focus {
-  outline: 6px solid #00FFFF !important; /* Borda azul-ciano brilhante ao focar */
-  outline-offset: 4px;
+/* Oculta o conteúdo visualmente, mas mantém para leitores de tela */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
-/* Container do Menu */
-.accessibility-menu {
-  background-color: #1A1A1A;
-  border: 3px solid #FFFF00;
-  border-radius: 12px;
-  padding: 24px;
-  max-width: 600px;
+header, main {
+  max-width: 800px;
   margin: 0 auto;
 }
 
-.menu-title {
-  font-size: 2rem;
-  color: #011112;
-  margin-bottom: 24px;
-  text-align: center;
-  border-bottom: 2px solid #00eeff;
-  padding-bottom: 12px;
+h1, h2 {
+  color: #FFFF00; /* Alto contraste: amarelo */
 }
 
-.menu-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+section {
+  border: 2px solid #FFF;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
 }
 
-/* Botões do Menu */
-.menu-btn {
-  width: 100%;
-  padding: 18px;
-  background-color: #000000;
-  color: #FFFFFF;
-  border: 2px solid #FFFFFF;
-  border-radius: 6px;
-  font-size: 1.3rem;
-  font-weight: bold;
-  text-align: left;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.menu-btn:hover {
-  background-color: #fefbfb;
-}
-
-.option-number {
-  color: #193ceb;
-  margin-right: 8px;
-}
-
-/* Caixa de Status de Áudio/Voz */
-.voice-status {
-  margin-top: 32px;
-  padding: 16px;
-  background-color: #002B49;
-  border: 2px solid #00FFFF;
-  color: #FFFFFF;
+button {
+  background-color: #FFFF00;
+  color: #000;
   font-size: 1.2rem;
-  text-align: center;
-  border-radius: 6px;
+  font-weight: bold;
+  padding: 15px 25px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+}
+
+button:focus, button:hover {
+  outline: 4px solid #00FFFF; /* Destaque visual e de foco */
+  background-color: #FFF;
+}
+
+.botão-emergência {
+  background-color: #FF0000;
+  color: #FFF;
+}
+
+.status-mensagem {
+  margin-top: 10px;
 }
